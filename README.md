@@ -1,11 +1,13 @@
 # PGP/GPG TUTORIAL
-
-GOALS:  
+**Goals:**  
 - Demonstrate GPG
 - Encrypt/Decrypt symmetric message
 - Generate Key pair
 - Encrypt/Decrypt asymmetric message
-- Digital Signatures
+
+**Workshop Resources:**  
+- [Slides](https://docs.google.com/presentation/d/1AluVUzUYUW1jCTxA4rtfI3uQ-H5zIt-qA429nrMEgjc/edit?usp=sharing)
+- [Spreadsheet](https://docs.google.com/spreadsheets/d/1szrkJcoShGOEAi7lnbSkJgrH_dvxps0FY5ee0IBwMV0/edit#gid=1837363414)
 
 ## Demo
 1. View `demo.txt.asc`  
@@ -14,56 +16,62 @@ This is an encrypted message
 2. Decrypt this message by running `gpg -d demo.txt.asc` in the REPL  
 The password is `itpcamp2022` 
 
-_This demo uses symmetric encryption, so anyone with the password can decrypt. _
+*This example uses symmetric encryption, so anyone with the password can decrypt--*
 
 ---
 
 ## Symmetric Encryption Walk through
-#### Write a secret message 
-Record a secret message in secret.txt
+### Encrypting a message
+1. Write a secret message in `secret.txt`
+2. Encrypt your message with a key.  
+  ```sh
+  gpg --armor --symmetric secret.txt
 
-#### Encrypt your message
-`gpg --armor --symmetric secret.txt`
+  # This will output secret.txt.asc
+  ```
+3. Copy/Paste secret.txt.asc into [spreadsheet](https://docs.google.com/spreadsheets/d/1szrkJcoShGOEAi7lnbSkJgrH_dvxps0FY5ee0IBwMV0/edit#gid=1837363414) with key
 
-#### Decrypt your message
-`gpg -d secret.txt.asc > decryptedMsg.txt`
-
+### Decrypting a message
+1. Copy an ecrypted message from the [spreadsheet](https://docs.google.com/spreadsheets/d/1szrkJcoShGOEAi7lnbSkJgrH_dvxps0FY5ee0IBwMV0/edit#gid=1837363414) into a file in the repl named `decode.txt`
+2. Run the command `gpg -d decode.txt`
+3. Enter password from spreadsheet
+4. Enjoy a shared secret :)
 ---
 
 ## Asymmetric Encryption Walk Through
-#### Generate a key pair
-`gpg --gen-key` 
-_Move mouse/ type during generation to make a better entropy_
+### Generate a key pair
+1. Generate a key pair
+```sh
+`gpg --full-generate-key` 
 
-#### View private key
-`gpg --export-secret-key --armor <name used for keygen>`
-_This is for your eyes only!_
+# Move mouse/ type during generation to make a better entropy
+```
+2. Export public key
+```sh
+gpg --armor --export <email>
 
-#### Export public key 
-`gpg --armor --output public-key.gpg --export <email>`
-_This is for you to share :)_
+# Use default settings
+# This is for you to share :)
+```
+3. Copy public key into [spreadsheet](https://docs.google.com/spreadsheets/d/1szrkJcoShGOEAi7lnbSkJgrH_dvxps0FY5ee0IBwMV0/edit#gid=0)
+4. Enter email into spreadsheet 
 
-#### Import Mark's public key
-1. Copy Mark's public key [He will provide] into mark.key
-2. run `gpg --import mark.key`
+### Importing a public key
+1. Copy Mark's public key (He will provide) into `mark.pub`
+2. Run `gpg --import mark.pub`
+3. Repeat for any workshop participants you want to write secrets to by copying into `importPub.txt`.
 
-#### Encrypt for only Mark
-1. Write a message for Mark in marksSecret.txt
-2. `gpg --encrypt --armor -r mark@email.com marksSecret.txt`
-3. Send to mark
+### Encrypt for Mark only
+1. Write a message for Mark in `secret_for_mark.txt`
+2. Encrypt secret using Mark's public key:
+```sh
+gpg --encrypt --armor -r mark@email.com secret_for_mark.txt
 
----
+# This will create a file named secret_for_mark.txt.asc
+```
+3. Send to Mark via [spreadsheet](https://docs.google.com/spreadsheets/d/1szrkJcoShGOEAi7lnbSkJgrH_dvxps0FY5ee0IBwMV0/edit#gid=0)
+4. Repeat with any workshop participant
 
-## Digital Signatures with PGP
-- Compressed Signed Document
-`gpg --output doc.sig --sign doc`
-
-Verify:
-`gpg --output doc --decrypt doc.sig`
-
-- Clear Signed  
-`gpg --clear-sign doc`
-
-- Detached sign  
-`gpg --output doc.sig --detach-sig doc`
-
+### Decrypting your secret
+1. Copy PGP encrypted message into `decode.txt`
+2. Decrypt with your private key: `gpg -d decode.txt`
