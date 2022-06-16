@@ -42,7 +42,7 @@ The password is `itpcamp2022`
 ### Generate a key pair
 1. Generate a key pair
 ```sh
-`gpg --full-generate-key` 
+gpg --full-generate-key
 
 # Move mouse/ type during generation to make a better entropy
 ```
